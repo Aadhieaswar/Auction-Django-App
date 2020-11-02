@@ -1,0 +1,16 @@
+# vim files and folder
+.vim/
+/.vim/
+
+# pycache
+__pycache__/
+/__pycache__/
+
+# virtual env
+venv/
+
+# database
+db.sqlite3
+
+# uploads (images)
+/uploads/

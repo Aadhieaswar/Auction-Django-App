@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <h2 class="blue-text">WatchList</h2>
+
+  {% if message %}
+  <div class="alert alert-info">
+    {{ message }}
+  </div>
+  {% endif %}
+
+  {% if listings %}
+  <ul class="listings">
+    {% for listing in listings %}
+    <li>
+      <div class="card">
+        <div class="card-header">
+          {{ listing.name }}
+        </div>
+        <div class="card-body">
+          <img alt="{{ listing.name }} - img" src="{{ listing.image.url }}" height="170" />
+          <h5 class="list-cost">Bid Starts From: <strong>${{ listing.initial }}</strong> </h5>
+          <a class="nav-link" href="{% url 'auctions:listing' listing.id %}">View Listing</a>
+          {% if bid %}
+          <h6>Current Bid: <strong style="color: var(--warning)">{{ bid }}</strong></h6>
+          {% else %}
+          <h6 style="color: var(--success)">No Bids Currently Placed</h6>
+          {% endif %}
+          <a class="btn btn-outline-danger" href="{% url 'auctions:remove' listing.id %}">Remove from WatchList</a>
+          <h6 class="text-muted right-align">Date added: {{ listing.created }}</h6>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+    <li class="card card-header bg-info">
+      <div style="text-align: center; color: white;"> --- END --- </div>
+    </li>
+  </ul>
+  {% endif %}
+
+{% endblock %}

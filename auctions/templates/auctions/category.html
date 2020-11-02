@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+  <h2 class="blue-text">Categories</h2>
+
+  {% if category_list %}
+    {% for category in category_list %}
+      <ul class="listings">
+        <h3 class="blue-text">{{ category }}</h3>
+        {% for listing in category %}
+          <li>
+            <div class="card">
+              <div class="card-header">
+                {{ listing.name }}
+              </div>
+              <div class="card-body">
+                <img alt="{{ listing.name }} - img" src="{{ listing.image.url }}" height="170" />
+                <h5 class="list-cost">Bid Starts From: <strong>${{ listing.initial }}</strong> </h5>
+                <h5> Category: <strong style="color: var(--gray)">{{ listing.category }}</strong> </h5>
+                {% if user.is_authenticated %}
+                <div class="links-box">
+                  <!-- <a class="btn btn-outline-primary" href="{% url 'auctions:listing' listing.id %}">View Listing</a> -->
+                  <!-- <a class="btn btn-outline-success" href="{% url 'auctions:add_to' listing.id %}">Add to WatchList</a> -->
+                </div>
+                {% else %}
+                <a class="nav-link" href="{% url 'auctions:login' %}">LogIn to view listing</a>
+                {% endif %}
+                <h6 class="text-muted right-align">Date added: {{ listing.created }}</h6>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <hr>
+    {% endfor %}
+  {% endif %}
+{% endblock %}

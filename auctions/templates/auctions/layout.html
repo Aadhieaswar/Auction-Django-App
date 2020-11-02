@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}Auctions{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    <h1 id="auction-title">Auctions</h1>
+    <nav>
+      {% if user.is_authenticated %}
+      <div class="username">
+        Signed in as <strong style="color: var(--indigo)">{{ user.username }}</strong>.
+      </div>
+      {% endif %}
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'auctions:index' %}">Active Listings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'auctions:categories' %}">Categories</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'auctions:watchlist' %}">WatchList</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'auctions:logout' %}">Log Out</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'auctions:login' %}">Log In</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'auctions:register' %}">Register</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    <br>
+    <hr>
+    {% block body %}
+    {% endblock %}
+  </body>
+</html>
