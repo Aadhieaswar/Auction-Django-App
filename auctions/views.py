@@ -162,6 +162,7 @@ def add_to_watchlist(request, item_id):
     if request.user not in watch_list:
         watch_list[request.user] = []
         watch_list[request.user].append(item_id)
+        message = "Successfully added item to your WatchList"
     elif item_id in watch_list[request.user]:
         message = "Item already present in your WatchList"
     else:

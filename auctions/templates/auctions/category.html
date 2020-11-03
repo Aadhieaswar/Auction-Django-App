@@ -4,9 +4,17 @@
   <h2 class="blue-text">Categories</h2>
 
   {% if category_list %}
+    <ul class="category-list">
+    {% for key, category in category_list.items %}
+      <li>
+        <a class="btn btn-warning" href="#{{ key }}">{{ key }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+    <hr>
     {% for key, category in category_list.items %}
       <ul class="listings">
-        <h3 class="blue-text">{{ key }}</h3>
+        <h3 class="blue-text" id="{{ key }}" style="color: var(--indigo)">{{ key }}</h3>
         {% for listing in category %}
           <li>
             <div class="card">
