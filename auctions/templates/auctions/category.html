@@ -4,9 +4,9 @@
   <h2 class="blue-text">Categories</h2>
 
   {% if category_list %}
-    {% for category in category_list %}
+    {% for key, category in category_list.items %}
       <ul class="listings">
-        <h3 class="blue-text">{{ category }}</h3>
+        <h3 class="blue-text">{{ key }}</h3>
         {% for listing in category %}
           <li>
             <div class="card">
@@ -19,8 +19,8 @@
                 <h5> Category: <strong style="color: var(--gray)">{{ listing.category }}</strong> </h5>
                 {% if user.is_authenticated %}
                 <div class="links-box">
-                  <!-- <a class="btn btn-outline-primary" href="{% url 'auctions:listing' listing.id %}">View Listing</a> -->
-                  <!-- <a class="btn btn-outline-success" href="{% url 'auctions:add_to' listing.id %}">Add to WatchList</a> -->
+                  <a class="btn btn-outline-primary" href="{% url 'auctions:listing' listing.id %}">View Listing</a>
+                  <a class="btn btn-outline-success" href="{% url 'auctions:add_to' listing.id %}">Add to WatchList</a>
                 </div>
                 {% else %}
                 <a class="nav-link" href="{% url 'auctions:login' %}">LogIn to view listing</a>
@@ -34,4 +34,5 @@
       <hr>
     {% endfor %}
   {% endif %}
+
 {% endblock %}
