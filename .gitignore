@@ -10,7 +10,7 @@ __pycache__/
 venv/
 
 # database
-db.sqlite3
+# db.sqlite3
 
 # uploads (images)
 /uploads/
