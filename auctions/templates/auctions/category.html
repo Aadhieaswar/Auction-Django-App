@@ -14,7 +14,7 @@
     <hr>
     {% for key, category in category_list.items %}
       <ul class="listings">
-        <h3 class="blue-text" id="{{ key }}" style="color: var(--indigo)">{{ key }}</h3>
+        <h3 class="blue-text category-title" id="{{ key }}">{{ key }}</h3>
         {% for listing in category %}
           <li>
             <div class="card">

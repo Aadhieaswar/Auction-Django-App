@@ -1,23 +1,15 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-  <div class="add-listing-container">
-    <h2 class="blue-text margin-bot">
-      Active Listings
-    </h2>
-    {% if user.is_authenticated %}
-    <h5 title="add listing" class="plus-container">
-      <a class="btn btn-outline-success plus-link" href="{% url 'auctions:add_listing' %}">+ Add new Listing</a>
-      <a class="btn btn-outline-warning plus-link" href="{% url 'auctions:user_listings' %}">
-        View Your Listings
-      </a>
-    </h5>
-    {% endif %}
-  </div>
+
+  <h2 class="blue-text">Your Listings</h2>
+  <h5 title="add listing" class="plus-container">
+    <a class="btn btn-outline-success plus-link" href="{% url 'auctions:add_listing' %}">+ Add new Listing</a>
+  </h5>
 
   {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
+    <div class="alert alert-danger">
       {{ message }}
     </div>
     {% endfor %}
@@ -57,5 +49,10 @@
       <div style="text-align: center; color: white;"> --- END --- </div>
     </li>
   </ul>
+  {% else %}
+  <div class="alert alert-info">
+    You don't currently possess any active listings.
+  </div>
   {% endif %}
+
 {% endblock %}

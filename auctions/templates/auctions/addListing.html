@@ -4,26 +4,18 @@
 
 <h2 class="blue-text">Add New Listing</h2>
 
-  {% if message %}
+  {% if messages %}
+    {% for message in messages %}
     <div class="alert alert-danger">
       {{ message }}
     </div>
+    {% endfor %}
   {% endif %}
 
-<form action="#" class="login-form listing-form" method="POST">
-  <input name="list_name" class="form-control" type="text" maxlength="100" placeholder="Title" />
-  <input name="list_price" class="form-control" type="number" min="10" placeholder="Initial Bid" />
-  <select class="custom-select" type="text" name="category">
-    <option value="default">Choose category...</option>
-    {% for category in categories %}
-    <option value="{{ category }}">{{ category }}</option>
-    {% endfor %}
-  </select>
-  <div class="image-field">
-    <label for="img-file">Upload image file</label>
-    <input name="list_price" class="form-control-file" type="file" id="img-file" />
-  </div>
-  <button class="btn btn-primary" type="submit">Add Listing</button>
-</form>
+  <form action="{% url 'auctions:add_listing' %}" class="login-form listing-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Add Listing</button>
+  </form>
 
 {% endblock %}

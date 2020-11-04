@@ -8,14 +8,8 @@ from django.contrib import messages
 from decimal import *
 
 from .models import User, Listing, Bid, Comment
+from .forms import ListingForm
 from .decorators import Unauthenticated_user, Authenticated_user
-
-# dictionary to store all the data from the models
-model_data = {
-    'Listings': Listing.objects.all(),
-    'Bids': Bid.objects.all(),
-    'Comments': Comment.objects.all(),
-}
 
 # dictionary variable to keep track of individual's watchlist
 watch_list = dict()
@@ -32,9 +26,8 @@ CATEGORIES = [
 ]
 
 def index(request):
-    listings = model_data['Listings']
     context = {
-        'listings': listings,
+        'listings': Listing.objects.all(),
     }
     return render(request, "auctions/index.html", context)
 
@@ -173,28 +166,28 @@ def add_to_watchlist(request, item_id):
     if request.user not in watch_list:
         watch_list[request.user] = []
         watch_list[request.user].append(item_id)
-        messages.error(request, 'Successfully added item to your WatchList', fail_silently=True)
+        messages.success(request, 'Successfully added item to your WatchList.', fail_silently=True)
     elif item_id in watch_list[request.user]:
-        messages.error(request, 'Item already present in your WatchList', fail_silently=True)
+        messages.warning(request, 'Item already present in your WatchList.', fail_silently=True)
     else:
         watch_list[request.user].append(item_id)
-        messages.error(request, 'Successfully added item to your WatchList', fail_silently=True)
+        messages.success(request, 'Successfully added item to your WatchList.', fail_silently=True)
     return redirect("auctions:index")
 
 @Authenticated_user
 def remove_from(request, item_id):
     if request.user not in watch_list:
-        messages.error(request, 'Cannot remove from empty WatchList', fail_silently=True)
+        messages.warning(request, 'Cannot remove from empty WatchList.', fail_silently=True)
     elif item_id in watch_list[request.user]:
         watch_list[request.user].remove(item_id)
-        messages.error(request, 'Successfully removed item from your WatchList', fail_silently=True)
+        messages.success(request, 'Successfully removed item from your WatchList.', fail_silently=True)
     else:
-        messages.error(request, 'Item not in your WatchList', fail_silently=True)
+        messages.warning(request, 'Item not in your WatchList.', fail_silently=True)
     return redirect("auctions:index")
 
 def categories(request):
     category = dict()
-    listings = model_data['Listings']
+    listings = Listing.objects.all()
     for item in listings:
         if item.category not in category:
             category[item.category] = []
@@ -213,8 +206,37 @@ def success(request):
 @Authenticated_user
 def addListing(request):
     if request.method == "POST":
-        pass
+        form = ListingForm(request.POST, request.FILES or None)
+
+        if form.is_valid():
+            newListing = form.save(commit=False)
+            newListing.user = request.user
+            newListing.save()
+            messages.success(request, 'Successfully created your listing.', fail_silently=True)
+        else:
+            messages.error(request, 'Invalid Listing!', fail_silently=True)
+            return redirect("auctions:add_listing")
+        return redirect("auctions:index")
+    form = ListingForm()
     context = {
-        'categories': CATEGORIES,
+        'form': form,
     }
     return render(request, "auctions/addListing.html", context)
+
+@Authenticated_user
+def user_listings(request):
+    current_user_listings = Listing.objects.filter(user=request.user)
+    context = {
+        'listings': current_user_listings,
+    }
+    return render(request, "auctions/userlistings.html", context)
+
+@Authenticated_user
+def close_listing(request, listing_id):
+    listing = Listing(pk=listing_id)
+    if listing.user is request.user:
+        listing.status = 'Closed'
+        messages.success(request, 'Listing successfully closed.', fail_silently=True)
+    else:
+        messages.warning(request, 'Unable to close listing! Authentication error.', fail_silently=True)
+    return redirect("auctions:user_listings")

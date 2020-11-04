@@ -13,12 +13,12 @@ class Listing(models.Model):
         ('Clothes', 'Clothes'),
         ('Decoration', 'Decoration'),
         ('Electronics', 'Electronics'),
-        ('Other', 'Other'),
         ('Valuables', 'Valueables'),
+        ('Other', 'Other'),
     ]
     STATUS = [
         ('Pending', 'Pending'),
-        ('Sold', 'Sold'),
+        ('Closed', 'Closed'),
     ]
     DEFAULT_USER = 1
     name = models.CharField(max_length = 100, blank = False)
