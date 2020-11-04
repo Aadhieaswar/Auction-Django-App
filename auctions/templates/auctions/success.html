@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+Success
+{% endblock %}
+
+{% block body %}
+
+<div class="card border-success success-card">
+  <h4 class="card-header border-success bg-light">Success {{ request.user }}!</h4>
+  <div class="card-body">
+    <img src="{{ item.image.url }}"/>
+    You have successfully won the bid for {{ item.name }}
+  </div>
+</div>
+
+{% endblock %}

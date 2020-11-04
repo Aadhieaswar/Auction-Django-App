@@ -4,7 +4,7 @@
   <h2 class="blue-text">Categories</h2>
 
   {% if category_list %}
-    <ul class="category-list">
+    <ul class="category-list bg-light">
     {% for key, category in category_list.items %}
       <li>
         <a class="btn btn-warning" href="#{{ key }}">{{ key }}</a>
@@ -24,7 +24,6 @@
               <div class="card-body">
                 <img alt="{{ listing.name }} - img" src="{{ listing.image.url }}" height="170" />
                 <h5 class="list-cost">Bid Starts From: <strong>${{ listing.initial }}</strong> </h5>
-                <h5> Category: <strong style="color: var(--gray)">{{ listing.category }}</strong> </h5>
                 {% if user.is_authenticated %}
                 <div class="links-box">
                   <a class="btn btn-outline-primary" href="{% url 'auctions:listing' listing.id %}">View Listing</a>

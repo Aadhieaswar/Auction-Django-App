@@ -3,10 +3,12 @@
 {% block body %}
   <h2 class="blue-text">Active Listings</h2>
 
-  {% if message %}
-  <div class="alert alert-info">
-    {{ message }}
-  </div>
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info">
+      {{ message }}
+    </div>
+    {% endfor %}
   {% endif %}
 
   {% if listings %}

@@ -16,10 +16,17 @@ class Listing(models.Model):
         ('Other', 'Other'),
         ('Valuables', 'Valueables'),
     ]
+    STATUS = [
+        ('Pending', 'Pending'),
+        ('Sold', 'Sold'),
+    ]
+    DEFAULT_USER = 1
     name = models.CharField(max_length = 100, blank = False)
     initial = models.DecimalField(max_digits = 10, decimal_places = 2)
+    user = models.ForeignKey(User, blank = False, on_delete = models.CASCADE, default = DEFAULT_USER)
     image = models.ImageField()
     category = models.CharField(max_length = 11, choices = CATEGORIES, default = 'Other')
+    status = models.CharField(max_length = 7, choices = STATUS, default = 'Pending')
     created = models.DateField(auto_now_add = True)
 
     def __str__(self):

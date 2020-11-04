@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-# from django.db.models import Q
+from django.contrib import messages
 
 from decimal import *
 
@@ -19,6 +19,17 @@ model_data = {
 
 # dictionary variable to keep track of individual's watchlist
 watch_list = dict()
+
+# categories present in the listing model
+CATEGORIES = [
+    'Accessories',
+    'Antiques',
+    'Clothes',
+    'Decoration',
+    'Electronics',
+    'Other',
+    'Valuables',
+]
 
 def index(request):
     listings = model_data['Listings']
@@ -162,34 +173,24 @@ def add_to_watchlist(request, item_id):
     if request.user not in watch_list:
         watch_list[request.user] = []
         watch_list[request.user].append(item_id)
-        message = "Successfully added item to your WatchList"
+        messages.error(request, 'Successfully added item to your WatchList', fail_silently=True)
     elif item_id in watch_list[request.user]:
-        message = "Item already present in your WatchList"
+        messages.error(request, 'Item already present in your WatchList', fail_silently=True)
     else:
         watch_list[request.user].append(item_id)
-        message = "Successfully added item to your WatchList"
-    listings = model_data['Listings']
-    context = {
-        'listings': listings,
-        'message': message,
-    }
-    return render(request, "auctions/index.html", context)
+        messages.error(request, 'Successfully added item to your WatchList', fail_silently=True)
+    return redirect("auctions:index")
 
 @Authenticated_user
 def remove_from(request, item_id):
     if request.user not in watch_list:
-        message = "Cannot remove from empty WatchList"
+        messages.error(request, 'Cannot remove from empty WatchList', fail_silently=True)
     elif item_id in watch_list[request.user]:
         watch_list[request.user].remove(item_id)
-        message = "Successfully removed item from your WatchList"
+        messages.error(request, 'Successfully removed item from your WatchList', fail_silently=True)
     else:
-        message = "Item not in your WatchList"
-    listings = model_data['Listings']
-    context = {
-        'listings': listings,
-        'message': message,
-    }
-    return render(request, "auctions/index.html", context)
+        messages.error(request, 'Item not in your WatchList', fail_silently=True)
+    return redirect("auctions:index")
 
 def categories(request):
     category = dict()
@@ -204,3 +205,16 @@ def categories(request):
         'category_list': category,
     }
     return render(request, "auctions/category.html", context)
+
+@Authenticated_user
+def success(request):
+    return render(request, "auctions/success.html")
+
+@Authenticated_user
+def addListing(request):
+    if request.method == "POST":
+        pass
+    context = {
+        'categories': CATEGORIES,
+    }
+    return render(request, "auctions/addListing.html", context)
