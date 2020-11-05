@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
+# from django.db.models import Q
 
 from decimal import *
 
@@ -14,20 +15,9 @@ from .decorators import Unauthenticated_user, Authenticated_user
 # dictionary variable to keep track of individual's watchlist
 watch_list = dict()
 
-# categories present in the listing model
-CATEGORIES = [
-    'Accessories',
-    'Antiques',
-    'Clothes',
-    'Decoration',
-    'Electronics',
-    'Other',
-    'Valuables',
-]
-
 def index(request):
     context = {
-        'listings': Listing.objects.all(),
+        'listings': Listing.objects.filter(status="Pending"),
     }
     return render(request, "auctions/index.html", context)
 
@@ -225,7 +215,7 @@ def addListing(request):
 
 @Authenticated_user
 def user_listings(request):
-    current_user_listings = Listing.objects.filter(user=request.user)
+    current_user_listings = Listing.objects.filter(user=request.user, status='Pending')
     context = {
         'listings': current_user_listings,
     }
@@ -233,9 +223,10 @@ def user_listings(request):
 
 @Authenticated_user
 def close_listing(request, listing_id):
-    listing = Listing(pk=listing_id)
-    if listing.user is request.user:
+    listing = Listing.objects.get(pk=listing_id)
+    if listing.user == request.user:
         listing.status = 'Closed'
+        listing.save()
         messages.success(request, 'Listing successfully closed.', fail_silently=True)
     else:
         messages.warning(request, 'Unable to close listing! Authentication error.', fail_silently=True)

@@ -18,14 +18,20 @@
   <br>
   By: <span style="color: var(--warning)">{{ bid.user }}</span>
   <div class="text-muted">Bid added at {{ bid.added }}</div>
+  <br><br>
   {% else %}
   <span style="color: var(--success)">
     No Bids Currently Placed
   </span>
   <br>
   Bids start from <strong style="color: var(--warning)">${{ listing.initial }}</strong>
+  <br><br>
   {% endif %}
   <a class="btn btn-success" href="{% url 'auctions:add_to' listing.id %}">Add to WatchList</a>
+  {% ifequal listing.user user %}
+  <br><br>
+  <a class="btn btn-danger" href="{% url 'auctions:close_listing' listing.id %}">Close Listing</a>
+  {% endifequal %}
 </div>
 <hr>
 <h5>Bid </h5>

@@ -32,14 +32,13 @@
           <img alt="{{ listing.name }} - img" src="{{ listing.image.url }}" height="170" />
           <h5 class="list-cost">Bid Starts From: <strong>${{ listing.initial }}</strong> </h5>
           <h5> Category: <strong style="color: var(--gray)">{{ listing.category }}</strong> </h5>
-          {% if user.is_authenticated %}
           <div class="links-box">
             <a class="btn btn-outline-primary" href="{% url 'auctions:listing' listing.id %}">View Listing</a>
             <a class="btn btn-outline-success" href="{% url 'auctions:add_to' listing.id %}">Add to WatchList</a>
+            {% ifequal listing.user user %}
+            <a class="btn btn-outline-danger" href="{% url 'auctions:close_listing' listing.id %}">Close Listing</a>
+            {% endifequal %}
           </div>
-          {% else %}
-          <a class="nav-link" href="{% url 'auctions:login' %}">LogIn to view listing</a>
-          {% endif %}
           <h6 class="text-muted right-align">Date added: {{ listing.created }}</h6>
         </div>
       </div>

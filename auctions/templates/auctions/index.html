@@ -44,6 +44,9 @@
           <div class="links-box">
             <a class="btn btn-outline-primary" href="{% url 'auctions:listing' listing.id %}">View Listing</a>
             <a class="btn btn-outline-success" href="{% url 'auctions:add_to' listing.id %}">Add to WatchList</a>
+            {% ifequal listing.user user %}
+            <a class="btn btn-outline-danger" href="{% url 'auctions:close_listing' listing.id %}">Close Listing</a>
+            {% endifequal %}
           </div>
           {% else %}
           <a class="nav-link" href="{% url 'auctions:login' %}">LogIn to view listing</a>
