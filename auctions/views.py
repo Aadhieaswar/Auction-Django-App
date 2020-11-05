@@ -15,8 +15,19 @@ from .decorators import Unauthenticated_user, Authenticated_user
 watch_list = dict()
 
 def index(request):
+    listings = []
+    items = Listing.objects.filter(status="Pending")
+    for item in items:
+        try:
+            bid = Bid.objects.get(listing=item)
+        except:
+            bid = None
+        listings.append({
+            'listing': item,
+            'bid': bid,
+        })
     context = {
-        'listings': Listing.objects.filter(status="Pending"),
+        'listings': listings,
     }
     return render(request, "auctions/index.html", context)
 
@@ -104,23 +115,18 @@ def bid(request):
         item = Listing.objects.get(pk=item_id)
         old_bid = Bid.objects.filter(listing=item)
 
-        if old_bid.count() is not 1:
+        if Decimal(new_bid) < old_bid[0].highest_bid:
+            messages.warning(request, 'The bid you placed was lower than needed.', fail_silently=True)
+        elif old_bid.count() < 1:
             bid = Bid(user=request.user, listing=item, highest_bid=new_bid)
             bid.save()
-        elif Decimal(new_bid) < old_bid[0].highest_bid:
-            comments = Comment.objects.filter(listing=item)
-            default_bid = old_bid[0].highest_bid + 10
-            message = "The bid you placed was lower than needed"
-            context = {
-                'listing': item,
-                'bid': old_bid[0],
-                'comments': comments,
-                'default_bid': default_bid,
-                'message': message,
-            }
-            return render(request, "auctions/listing.html", context)
+            messages.success(request, 'Bid Placed Successfully!', fail_silently=True)
         else:
-            old_bid.update(highest_bid=new_bid, user=request.user)
+            old_bid = Bid.objects.get(listing=item)
+            old_bid.highest_bid = new_bid
+            old_bid.user = request.user
+            old_bid.save()
+            messages.success(request, 'Bid Placed Successfully!', fail_silently=True)
     return redirect("auctions:listing", item_id)
 
 @Authenticated_user
@@ -142,9 +148,16 @@ def watchlist(request):
         }
         return render(request, "auctions/watchlist.html", context)
     listings = []
-    for item in watch_list[request.user]:
-        list_item = Listing.objects.get(pk=item)
-        listings.append(list_item)
+    for item_id in watch_list[request.user]:
+        item = Listing.objects.get(pk=item_id)
+        try:
+            bid = Bid.objects.get(listing=item)
+        except:
+            bid = None
+        listings.append({
+            'listing': item,
+            'bid': bid,
+        })
     context = {
         'listings': listings,
     }
@@ -178,11 +191,16 @@ def categories(request):
     category = dict()
     listings = Listing.objects.all()
     for item in listings:
+        try:
+            bid = Bid.objects.get(listing=item)
+        except:
+            bid = None
         if item.category not in category:
             category[item.category] = []
-            category[item.category].append(item)
-        else:
-            category[item.category].append(item)
+        category[item.category].append({
+            'listing': item,
+            'bid': bid,
+        })
     context = {
         'category_list': category,
     }
@@ -214,9 +232,19 @@ def addListing(request):
 
 @Authenticated_user
 def user_listings(request):
+    listings = []
     current_user_listings = Listing.objects.filter(user=request.user, status='Pending')
+    for item in current_user_listings:
+        try:
+            bid = Bid.objects.get(listing=item)
+        except:
+            bid = None
+        listings.append({
+            'listing': item,
+            'bid': bid,
+        })
     context = {
-        'listings': current_user_listings,
+        'listings': listings,
     }
     return render(request, "auctions/userlistings.html", context)
 
