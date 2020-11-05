@@ -9,8 +9,11 @@ Success
 <div class="card border-success success-card">
   <h4 class="card-header border-success bg-light">Success {{ request.user }}!</h4>
   <div class="card-body">
-    <img src="{{ item.image.url }}" alt="{{ item.name }}" />
-    You have successfully won the bid for {{ item.name }}!
+    <img src="{{ listing.image.url }}" alt="{{ listing.name }}" height="200" />
+    <br>
+    You have successfully won the bid for: <strong style="color: var(--gray)">{{ listing.name }}</strong>
+    <br>
+    For the price of: <strong style="color: var(--warning)">${{ bid.highest_bid }}</strong>
   </div>
 </div>
 

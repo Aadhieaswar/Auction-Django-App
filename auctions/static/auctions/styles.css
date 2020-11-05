@@ -307,7 +307,7 @@ nav .nav {
 }
 
 @media screen and (max-width: 450px) {
-  .login-form {
+  .login-form, .success-card {
     width: 90%;
   }
 

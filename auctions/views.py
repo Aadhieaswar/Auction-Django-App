@@ -89,6 +89,18 @@ def register(request):
 def listing(request, listing):
     item = Listing.objects.get(pk=listing)
     old_bid = Bid.objects.filter(listing=item)
+    if item.status == 'Closed':
+        try: # fails if no bid was placed on the item when it was closed
+            bid = old_bid[0]
+            if bid.user == request.user:
+                context = {
+                    'listing': item,
+                    'bid': bid,
+                }
+                return render(request, 'auctions/success.html', context)
+        except:
+            return render(request, 'auctions/closed.html') # return after try fails
+        return render(request, 'auctions/closed.html') # return after try passes and the if statement fails
     comments = Comment.objects.filter(listing=item)
     if old_bid.count() is 1:
         default_bid = old_bid[0].highest_bid + 10
@@ -115,12 +127,12 @@ def bid(request):
         item = Listing.objects.get(pk=item_id)
         old_bid = Bid.objects.filter(listing=item)
 
-        if Decimal(new_bid) < old_bid[0].highest_bid:
-            messages.warning(request, 'The bid you placed was lower than needed.', fail_silently=True)
-        elif old_bid.count() < 1:
+        if old_bid.count() < 1:
             bid = Bid(user=request.user, listing=item, highest_bid=new_bid)
             bid.save()
             messages.success(request, 'Bid Placed Successfully!', fail_silently=True)
+        elif Decimal(new_bid) < old_bid[0].highest_bid:
+            messages.warning(request, 'The bid you placed was lower than needed.', fail_silently=True)
         else:
             old_bid = Bid.objects.get(listing=item)
             old_bid.highest_bid = new_bid
@@ -142,7 +154,7 @@ def comment(request):
 
 @Authenticated_user
 def watchlist(request):
-    if request.user not in watch_list:
+    if request.user not in watch_list or watch_list[request.user] == []:
         context = {
             'message': "Nothing in your watchlist",
         }
@@ -189,7 +201,7 @@ def remove_from(request, item_id):
 
 def categories(request):
     category = dict()
-    listings = Listing.objects.all()
+    listings = Listing.objects.filter(status="Pending")
     for item in listings:
         try:
             bid = Bid.objects.get(listing=item)
