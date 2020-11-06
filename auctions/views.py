@@ -133,6 +133,8 @@ def bid(request):
             messages.success(request, 'Bid Placed Successfully!', fail_silently=True)
         elif Decimal(new_bid) < old_bid[0].highest_bid:
             messages.warning(request, 'The bid you placed was lower than needed.', fail_silently=True)
+        elif Decimal(new_bid) == old_bid[0].highest_bid:
+            messages.warning(request, 'The bid you placed was the same as the current bid', fail_silently=True)
         else:
             old_bid = Bid.objects.get(listing=item)
             old_bid.highest_bid = new_bid
