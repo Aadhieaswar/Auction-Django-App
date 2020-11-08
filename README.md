@@ -28,7 +28,7 @@
   - `db.sqlite3`: the website uses `sqlite3` database which stores the data in this file
 - The `auctions` directory has the files for the auction application which includes:
   - `views.py`: server side code for the website
-  - `urls.py`: the urls that determine which of the views are run
+  - `urls.py`: the urls that determine which associates url extensions to the views from `views.py` file
   - `models.py`: the tables needed for the `sqlite3` database
   - `decorators.py`: functions that add a layer of security concerning logged-in and logged-out users
   - `admin.py`: adds the database tables to be modified in the django admin interface
