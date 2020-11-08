@@ -43,15 +43,15 @@
 
 ### Features of the Website
 ##### Create a new listing
-  <div style="text-align: center;">
-    <img src="./images/create-listing.gif" />
-  </div>
+  ![create-listing](./images/create-listing.gif)
+  <br>
+Here, there was listing named **Nice Mug** created with initial bid of **$10**
   <hr>
 
 ##### Bid on listings
-  <div style="text-align: center;">
-    <img src="./images/bid-on-listing.gif" />
-  </div>
+  ![bid on listing](./images/bid-on-listing.gif)
+  <br>
+Here, there was a bid of **$30** put on the **Cactus Decoration** which had an initial bid of **$20**
   <hr>
 
 ### Credits
