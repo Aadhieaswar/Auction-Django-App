@@ -1,7 +1,7 @@
 # Auction Web App
 
 ### Requirements
-- `Python3.6 frameworks/packages:`
+- `Python3.6 frameworks/packages` :
   - `Django`
   - `Pillow`
 - `Browser` (Preferably `Chrome`)
@@ -39,11 +39,22 @@
 - The `commerce` directory has the files for crucial for the functions of the auction application which includes:
   - `settings.py`: consists of all the settings for the whole web application
   - `urls.py`: the main urls file with the urls from all the apps in the web application (such as auctions)
+- The `images` directory holds many pictures that show you the look of the website
 
-### Looks, Feel, and Features of the Website
--
+### Features of the Website
+##### Create a new listing
+  <div style="text-align: center;">
+    <img src="./images/create-listing.gif" />
+  </div>
+  <hr>
 
+##### Bid on listings
+  <div style="text-align: center;">
+    <img src="./images/bid-on-listing.gif" />
+  </div>
+  <hr>
 
 ### Credits
 - Harvard CS50 for this idea of a wonderful project.
 - Implemented by __Aadhieaswar Senthil Kumar__
+  - Contact me at: <aadhieaswar@gmail.com>
