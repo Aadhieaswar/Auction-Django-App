@@ -54,6 +54,12 @@ Here, there was listing named **Nice Mug** created with initial bid of **$10**
 Here, there was a bid of **$30** put on the **Cactus Decoration** which had an initial bid of **$20**
   <hr>
 
+##### Responsive
+  ![responsiveness](./images/responsive.gif)
+  <br>
+Here, multiple pages of the auction website are shown in the __IphoneX__ screen view
+  <hr>
+
 ### Credits
 - Harvard CS50 for this idea of a wonderful project.
 - Implemented by __Aadhieaswar Senthil Kumar__
