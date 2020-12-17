@@ -32,6 +32,10 @@ class Listing(models.Model):
     def __str__(self):
         return f"{self.name} - starts at ${self.initial}"
 
+    # used to test in test.py
+    def is_valid_listing(self):
+        return len(self.name) > 0 and self.initial > 0
+
 # stores the bids for the Listings
 class Bid(models.Model):
     user = models.ForeignKey(User, blank = False, on_delete = models.CASCADE)
