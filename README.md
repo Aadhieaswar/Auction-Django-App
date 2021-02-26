@@ -1,4 +1,4 @@
-# Auction Web App
+# Auction - Django Web App
 
 ### Requirements
 - `Python3.6 frameworks/packages` :
